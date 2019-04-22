@@ -1,0 +1,14 @@
+{
+  "name": "personalsite",
+  "version": "1.0.0",
+  "description": "Personal Website for Austin",
+  "main": "index.js",
+  "scripts": {
+    "sass": "node-sass -w scss/ -o dist/css/ --recursive"
+  },
+  "author": "Austin Pagotto",
+  "license": "MIT",
+  "dependencies": {
+    "node-sass": "^4.11.0"
+  }
+}
