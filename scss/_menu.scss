@@ -1,3 +1,11 @@
+// hide small heading\
+.sm-heading{
+    &.close{
+        visibility: hidden;
+        @include easeOut;
+    }
+}
+
 // Menu button
 
 .menu-btn {
@@ -38,6 +46,8 @@
         }
     }
 }
+
+
 
 // Menu Overlay
 .menu {
