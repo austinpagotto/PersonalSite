@@ -20,7 +20,9 @@ function toggleMenu() {
         menuBranding.classList.add('show');
         navItems.forEach(item => item.classList.add('show'));
         smHeading.classList.add('close');
-        aboutPhoto.classList.add('close');
+        if (aboutPhoto){
+            aboutPhoto.classList.add('close');
+        }
         showMenu = true;
     } else {
         menuBtn.classList.remove('close');
@@ -29,7 +31,9 @@ function toggleMenu() {
         menuBranding.classList.remove('show');
         navItems.forEach(item => item.classList.remove('show'));
         smHeading.classList.remove('close');
-        aboutPhoto.classList.remove('close');
+        if (aboutPhoto){
+            aboutPhoto.classList.remove('close');
+        }
         showMenu = false;
     }
 }
