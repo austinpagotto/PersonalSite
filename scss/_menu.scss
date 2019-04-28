@@ -1,11 +1,17 @@
-// hide small heading\
+// hide small heading
 .sm-heading{
     &.close{
         visibility: hidden;
         @include easeOut;
     }
 }
-
+// Hide about me photo
+.bio-image{
+    &.close{
+        visibility: hidden;
+        @include easeOut;
+    }
+}
 // Menu button
 
 .menu-btn {

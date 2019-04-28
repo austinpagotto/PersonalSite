@@ -5,6 +5,8 @@ const menuNav = document.querySelector('.menu-nav');
 const menuBranding = document.querySelector('.menu-branding');
 const navItems = document.querySelectorAll('.nav-item');
 const smHeading = document.querySelector('.sm-heading');
+const aboutPhoto = document.querySelector('.bio-image');
+
 // Set state of menu
 let showMenu = false;
 
@@ -17,7 +19,8 @@ function toggleMenu() {
         menuNav.classList.add('show');
         menuBranding.classList.add('show');
         navItems.forEach(item => item.classList.add('show'));
-        smHeading.classList.add('close')
+        smHeading.classList.add('close');
+        aboutPhoto.classList.add('close');
         showMenu = true;
     } else {
         menuBtn.classList.remove('close');
@@ -25,7 +28,8 @@ function toggleMenu() {
         menuNav.classList.remove('show');
         menuBranding.classList.remove('show');
         navItems.forEach(item => item.classList.remove('show'));
-        smHeading.classList.remove('close')
+        smHeading.classList.remove('close');
+        aboutPhoto.classList.remove('close');
         showMenu = false;
     }
 }
