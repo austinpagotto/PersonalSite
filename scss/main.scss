@@ -73,9 +73,10 @@ main{
     display: grid;
     grid-gap: 30px;
     grid-template-areas: 
-    'bioimage bio bio'
+    'bioimage bio things'
     'job1 job2 job3';
     grid-template-columns: repeat(3,1fr);
+
 
     .bio-image{
         grid-area: bioimage;
@@ -84,13 +85,34 @@ main{
         height: 250px;
         border-radius: 50%;
         border: $secondary-color 3px solid;
+
     }
     
     .bio{
         grid-area: bio;
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
-    
+    .things{
+        grid-area: things;
+        font-size: 1.2rem;
+
+        .things-grid{
+            display: grid;
+            grid-template-areas: 
+            'thing1 thing2'
+            'thing3 thing4';
+            grid-template-columns: repeat(2,1fr);
+            padding: 0.5rem;
+            width: 75%;
+            text-align: right;
+            img{
+                width: 64px;
+                height: 64px;
+            }
+
+        }
+
+    }
     .job-1{
         grid-area:job1;
     }
@@ -107,23 +129,43 @@ main{
         background: lighten($color:$primary-color, $amount: 5);
         padding: 0.5rem;
         border-bottom: $secondary-color 5px solid;
+        div {
+            text-align: center;
+        }
+        img{
+            width:42px;
+            height: 45px;
+        }
         h3{
             font-weight: bold;
             letter-spacing: 1px;
+            font-size: 19.5px;
+        }
+        h6{
+            font-size: 1rem;
+            margin-top: 1rem;
         }
     }
 
 }
 
 // Work/Projects
+
+hr.style1{
+	border-top: 1px solid $secondary-color;
+}
+
 .projects {
     display: grid;
     grid-gap: 0.7rem;
     grid-template-columns: repeat(3, 1fr);
 
+    h2{
+        text-align: center;
+    }
     img {
         width: 100%;
-        height: 90%px;
+        height: 90%;
         border: 3px white solid;
 
         &:hover{

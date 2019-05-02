@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset='utf-8' />
+  <title>Display a map</title>
+  <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+  <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
+  <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
+  <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v4.2.0/mapbox-gl-geocoder.css' type='text/css' />
+  <style>
+    body { margin:0; padding:0; }
+    #map { position:absolute; top:0; bottom:0; width:100%; }
+  </style>
+</head>
+<body>
+
+<div id='map'></div>
+<script>
+mapboxgl.accessToken = 'pk.eyJ1IjoiYXBhZ290dG8iLCJhIjoiY2pwNzh0NjYxMW1ndDNxbnJ4Zmd0cnZ4cCJ9.-eIh1Yhfl7R1Q2rtX6lqAQ';
+const map = new mapboxgl.Map({
+  container: 'map',
+  style: 'mapbox://styles/apagotto/cjv5thobz047m1fpf0wvlj74h',
+  center: [-75.663362, 45.405191],
+  zoom: 11.6
+});
+
+map.addControl(new MapboxGeocoder({
+accessToken: mapboxgl.accessToken,
+mapboxgl: mapboxgl
+}));
+map.on('load',function(){
+            var popup = new mapboxgl.Popup({
+                closeButton: false,
+                closeOnClick : false
+            });
+              function showPopup(e) {
+                // Updates the cursor to a hand (interactivity)
+                map.getCanvas().style.cursor = 'pointer';
+
+                // Show the popup at the coordinates with some data
+                popup.setLngLat(e.features[0].geometry.coordinates)
+                .setHTML(checkEmpty("<p class = 'Popup'>" + e.features[0].properties.StreetNumber + ' '+ e.features[0].properties.StreetName + '</p>'))
+                .addTo(map);
+            }
+              function hidePopup() {
+                map.getCanvas().style.cursor = '';
+                popup.remove();
+            }
+
+            function checkEmpty(info) {
+                return (info) ? info : "No data";
+            }
+            map.on('mouseenter', 'ottawa-flood', showPopup);
+            map.on('mouseleave', 'ottawa-flood', hidePopup);
+            });
+
+</script>
+
+</body>
+</html>
