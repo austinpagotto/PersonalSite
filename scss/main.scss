@@ -20,7 +20,7 @@ body{
 h1, h2, h3 {
     margin: 0;
     font-weight: 500;
-    color:rgb(66,161,217);
+    color:	rgb(30,144,255);
     &.lg-heading{
         font-size: 6rem;
     }
@@ -33,7 +33,7 @@ h1, h2, h3 {
     }
 }
 a{
-    color:rgb(66,161,217);
+    color: rgb(142,30,255);
     text-decoration: none;
 }
 header{
@@ -128,7 +128,7 @@ main{
     .job{
         background: lighten($color:$primary-color, $amount: 5);
         padding: 0.5rem;
-        border-bottom: $secondary-color 5px solid;
+        border-bottom:rgb(142,30,255) 5px solid;
         div {
             text-align: center;
         }
@@ -152,7 +152,7 @@ main{
 // Work/Projects
 
 hr.style1{
-	border-top: 1px solid $secondary-color;
+    border: 1px solid  rgb(142,30,255);
 }
 
 .projects {
@@ -186,13 +186,14 @@ hr.style1{
 
     div{
         font-size: 2rem;
-        border: 3px #fff solid;
+        border: 3px  rgb(142,30,255) solid;
         padding: 1.5rem 2.5rem;
         margin-bottom: 3rem;
         @include easeOut;
         &:hover {
             padding: 0.5rem 1.5rem;
             background: $secondary-color;
+            color:  rgb(142,30,255);
             span{
                 color: black;
             }
@@ -228,6 +229,60 @@ hr.style1{
     padding: 1rem;
     background: darken($primary-color,10);
     height: 60px;
+}
+
+// Blog
+.post{
+    display: block;
+    margin-left: 75.6px;
+    margin-right: 75.6px;
+    .post-sample{
+        text-align: center;
+        iframe{
+            width: 500px;
+            height: 400px;
+            border-radius: 2%;
+            
+        }
+    }
+    .post-title{
+        font-size: 42px;
+        font-weight: 600;
+    }
+    .post-subtitle{
+        @extend .post-title;
+        font-size: 36px;
+    }
+    .post-time{
+        margin-bottom: 12px;
+        margin-top: 24px;
+        font-weight: 100px;
+        color: $secondary-color;
+    }
+
+    .post-author{
+        margin-bottom: 12px;
+        color: $secondary-color;
+    }
+    p{
+        font-size: 16px;
+        font-weight: 500;
+        
+    }
+    pre {
+        border-radius: 10px;
+    }
+    li{
+       margin-top: 8px;
+       list-style-type: none;
+       a{
+           color: rgb(142,30,255);
+           &:hover{
+            color: $secondary-color;
+            @include easeOut();
+        }
+       }
+    }
 }
 
 @import 'mobile';
