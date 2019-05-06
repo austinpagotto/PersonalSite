@@ -19,7 +19,9 @@ function toggleMenu() {
         menuNav.classList.add('show');
         menuBranding.classList.add('show');
         navItems.forEach(item => item.classList.add('show'));
-        smHeading.classList.add('close');
+        if (smHeading){
+            smHeading.classList.add('close');
+        }
         if (aboutPhoto){
             aboutPhoto.classList.add('close');
         }
@@ -30,7 +32,9 @@ function toggleMenu() {
         menuNav.classList.remove('show');
         menuBranding.classList.remove('show');
         navItems.forEach(item => item.classList.remove('show'));
-        smHeading.classList.remove('close');
+        if (smHeading){
+            smHeading.classList.remove('close');
+        }
         if (aboutPhoto){
             aboutPhoto.classList.remove('close');
         }

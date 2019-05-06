@@ -23,12 +23,12 @@
     transform: rotate(180deg); }
     .menu-btn.close .btn-line:nth-child(1) {
       transform: rotate(45deg) translate(5px, 5px) scale(1.3);
-      background: #d9c642; }
+      background: #fffe1e; }
     .menu-btn.close .btn-line:nth-child(2) {
       opacity: 0; }
     .menu-btn.close .btn-line:nth-child(3) {
       transform: rotate(134deg) translate(-5px, 5px) scale(1.3);
-      background: #d9c642; }
+      background: #fffe1e; }
 
 .menu {
   position: fixed;
@@ -67,7 +67,7 @@
       height: 250px;
       background: url("../img/DP.jpg");
       border-radius: 50%;
-      border: solid 3px #d9c642;
+      border: solid 3px #fffe1e;
       background-size: cover; }
   .menu .nav-item {
     transform: translate3d(600px, 0, 0);
@@ -75,7 +75,7 @@
     .menu .nav-item.show {
       transform: translate3d(0, 0, 0); }
     .menu .nav-item.current > a {
-      color: #d9c642; }
+      color: #fffe1e; }
   .menu .nav-link {
     display: inline-block;
     position: relative;
@@ -87,7 +87,7 @@
     text-decoration: none;
     transition: all 0.5s ease-out; }
     .menu .nav-link:hover {
-      color: #d9c642; }
+      color: #fffe1e; }
 
 .nav-item:nth-child(1) {
   transition-delay: 0.1s; }
@@ -128,7 +128,7 @@ body {
 h1, h2, h3 {
   margin: 0;
   font-weight: 500;
-  color: #42a1d9; }
+  color: dodgerblue; }
   h1.lg-heading, h2.lg-heading, h3.lg-heading {
     font-size: 6rem; }
   h1.sm-heading, h2.sm-heading, h3.sm-heading {
@@ -137,7 +137,7 @@ h1, h2, h3 {
     background: rgba(22, 22, 22, 0.1); }
 
 a {
-  color: #42a1d9;
+  color: #8e1eff;
   text-decoration: none; }
 
 header {
@@ -146,7 +146,7 @@ header {
   width: 100%; }
 
 .text-secondary {
-  color: #d9c642; }
+  color: #fffe1e; }
 
 main {
   padding: 4rem;
@@ -156,7 +156,7 @@ main {
     main .icons a {
       padding: 0.4rem; }
       main .icons a:hover {
-        color: #d9c642;
+        color: #fffe1e;
         transition: all 0.5s ease-out; }
   main#home {
     overflow: hidden; }
@@ -174,7 +174,7 @@ main {
     width: 250px;
     height: 250px;
     border-radius: 50%;
-    border: #d9c642 3px solid; }
+    border: #fffe1e 3px solid; }
   .about-info .bio {
     grid-area: bio;
     font-size: 1.2rem; }
@@ -200,7 +200,7 @@ main {
   .about-info .job {
     background: #1e1e1e;
     padding: 0.5rem;
-    border-bottom: #d9c642 5px solid; }
+    border-bottom: #8e1eff 5px solid; }
     .about-info .job div {
       text-align: center; }
     .about-info .job img {
@@ -215,7 +215,7 @@ main {
       margin-top: 1rem; }
 
 hr.style1 {
-  border-top: 1px solid #d9c642; }
+  border: 1px solid #8e1eff; }
 
 .projects {
   display: grid;
@@ -229,7 +229,7 @@ hr.style1 {
     border: 3px white solid; }
     .projects img:hover {
       opacity: 0.5;
-      border-color: #d9c642;
+      border-color: #fffe1e;
       transition: all 0.5s ease-out; }
 
 .boxes {
@@ -240,13 +240,14 @@ hr.style1 {
   margin-top: 1rem; }
   .boxes div {
     font-size: 2rem;
-    border: 3px #fff solid;
+    border: 3px #8e1eff solid;
     padding: 1.5rem 2.5rem;
     margin-bottom: 3rem;
     transition: all 0.5s ease-out; }
     .boxes div:hover {
       padding: 0.5rem 1.5rem;
-      background: #d9c642; }
+      background: #fffe1e;
+      color: #8e1eff; }
       .boxes div:hover span {
         color: black; }
 
@@ -256,7 +257,7 @@ hr.style1 {
   border: 0;
   margin-bottom: 0.3rem; }
   .btn:hover, .btn-dark:hover, .btn-light:hover {
-    background: #d9c642; }
+    background: #fffe1e; }
 
 .btn-dark {
   background: black;
@@ -271,6 +272,43 @@ hr.style1 {
   padding: 1rem;
   background: black;
   height: 60px; }
+
+.post {
+  display: block;
+  margin-left: 75.6px;
+  margin-right: 75.6px; }
+  .post .post-sample {
+    text-align: center; }
+    .post .post-sample iframe {
+      width: 500px;
+      height: 400px;
+      border-radius: 2%; }
+  .post .post-title, .post .post-subtitle {
+    font-size: 42px;
+    font-weight: 600; }
+  .post .post-subtitle {
+    font-size: 36px; }
+  .post .post-time {
+    margin-bottom: 12px;
+    margin-top: 24px;
+    font-weight: 100px;
+    color: #fffe1e; }
+  .post .post-author {
+    margin-bottom: 12px;
+    color: #fffe1e; }
+  .post p {
+    font-size: 16px;
+    font-weight: 500; }
+  .post pre {
+    border-radius: 10px; }
+  .post li {
+    margin-top: 8px;
+    list-style-type: none; }
+    .post li a {
+      color: #8e1eff; }
+      .post li a:hover {
+        color: #fffe1e;
+        transition: all 0.5s ease-out; }
 
 @media screen and (min-width: 1171px) {
   .projects {

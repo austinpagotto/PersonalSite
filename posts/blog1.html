@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ottawa flood with Mapbox</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/prism.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Inconsolata');
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu-btn">
+            <div class="btn-line"></div>
+            <div class="btn-line"></div>
+            <div class="btn-line"></div>
+        </div>
+        <nav class="menu">
+            <div class="menu-branding">
+                <div class="portrait"></div>
+            </div>
+            <ul class="menu-nav">
+                <li class="nav-item">
+                    <a href='../index.html' class="nav-link">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item current">
+                    <a href='../about.html' class="nav-link">
+                        About Me
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='../work.html' class="nav-link">
+                        My Blog
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='../contact.html' class="nav-link">
+                        Contact 
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="blog">
+        <div class="post">
+                <h2 class="post-title">
+                    2019 Ottawa flood impact using Mapbox, Python and Open street map data
+                </h2>
+        <div class="post-time">
+            <time>May 4 2019</time>
+        </div>
+
+        <div class="post-author">
+            <em>By: Austin Pagotto</em>
+        </div>
+        <br>
+            <hr>
+         <br>
+        <div class="post-sample">
+                <iframe src="ottawaFlood.html"></iframe>
+                <br>
+                <a href="ottawaFlood.html">View Map in Full Screen</a> <br>
+        </div>
+        <div class="post-text">
+            <p>
+                Brief explanation on how to analyze, manipulate and visualize open data sources to understand flood impact on specific properties.
+            </p>  
+                <div class="post-text-tools">
+                <p>
+                    Tools and data we'll use:   
+                    <ul>
+                        <li><a href="https://www.mapbox.com/">Mapbox</a></li>
+                        <li><a href="https://www.python.org/">Python</a></li>
+                        <li><a href="http://ftp.maps.canada.ca/pub/nrcan_rncan/Floods_Inondation/annual_annuel/EGS_Flood_Product_Current.gdb.zip">  NRCan flood extent</a></li>
+                        <li><a href="https://github.com/austinpagotto/Flood2019/blob/master/OttawaAddr.pkl"> OSM data</li></a>
+                    </ul>
+                </p>
+                </div>
+                <div class="post-subtitle">
+                    <h3>
+                       Import Packages and Data
+                    </h3>
+                </div>
+                <p>
+                    To get started, we need to import some packages. We need geopandas for spatial data manipulation, pandas for tabular manipulation, mapbox to upload our files to our web map, and shapely for point from x/y coordinates.
+                </p>
+                <pre><code class="language-python">import geopandas as gp 
+import mapbox as mb
+import pandas as pd
+from shapely.geometry import Point </code></pre>
+    <p>
+        The data we need can be found in the links above, we need the flood extent geodatabase file which is provided by NRCan. We also need the OSM ottawa address data. For now I have already pulled this into a pkl file, the process to do this will be explained in a seperate post.
+    </p>
+    <pre><code class="language-python">gdb = gp.read_file('EGS_Flood_Product_Current.gdb')
+ottawa = pd.read_pickle('OttawaAddr.pkl') </code></pre>
+        <div class="post-subtitle">
+            <h3>
+                Create a GeoDataFrame from the Address Data
+            </h3>
+        </div>
+            <p>
+                The address data has Latitude and Longitude stored in it already so we use this to geocode the property locations.  This is what becomes   the geometry column when creating the GeoDataFrame, we also have to change the projection so that it matches our flood data stored in the variable gdb.
+            </p>
+<pre><code class="language-python">geometry = [Point(xy) for xy in zip(ottawa['Longitude'],ottawa['Latitude'])]
+ottawa = gp.GeoDataFrame(ottawa,geometry=geometry)
+ottawa.crs = {'init' :'epsg:4326'}
+ottawa = ottawa.to_crs(gdb.crs) </code></pre>
+<div class="post-subtitle">
+        <h3>
+         Spatial Join Address to flood file
+        </h3>
+    </div>
+        <p>
+           Now that our addresses file is spatial, we can use the flood extent file to isolate properties that are within the flooded regions. The below code first filters the flood file for our area of interest then joins this to the addresses, reprojects and exports to a GeoJSON for uploading to the web!
+        </p>
+<pre><code class="language-python">gdb = gdb.loc[(gdb['is_active']==1) & (gdb['aoi_code'] == 'QC_LowerOttawa')]
+ottawa_flood = gp.sjoin(ottawa,gdb,how='inner',op='within')
+ottawa_flood = ottawa_flood.loc[:,['NodeID','StreetNumber','StreetName','geometry']]
+ottawa_flood = ottawa_flood.to_crs({'init' :'epsg:4326'})
+ottawa_flood.to_file('ottawa_flood.geojson',driver='GeoJSON',encoding="utf-8") </code></pre>
+<div class="post-subtitle">
+        <h3>
+        Prepare the flood file for web mapping
+        </h3>
+    </div>
+        <p>
+          Preparing the flood extent file to be uploaded won't be as easy as the address data because of its complex polygons and many overlapping extents. We dont really need to worry about any of the tabular data because we just want to host this data to be visualized.We just want the polygons to be as simple as possible for easy rendering and uploading. There are a few tricks to do this, first we'll union all the overlapping polygons so we just have 1. Then we'll simplify the geometry with a tolerance of 10, we'll lose precision but this is fine for visualization (we already joined the addresses to the exact flood extent). Finally we 'explode' the polygons which changes the multi-part polygons into many single part polygons which will make it much easier for mapbox to load. Like we did for the addresses we'll re project the crs that web maps like which is EPSG 4326 (WGS84) and export to a geoJSON.
+        </p>
+<pre><code class="language-python">gdb = gp.overlay(gdb,gdb,how='union')
+gdb.geometry = gdb.geometry.simplify(10)
+gdb = gdb.explode()
+gdb = gdb.to_crs({'init' :'epsg:4326'})
+gdb.to_file('extent.geojson',driver='GeoJSON',encoding="utf-8")</code></pre>
+<div class="post-subtitle">
+        <h3>
+        Upload to Mapbox
+        </h3>
+    </div>
+        <p>
+            Our final step. You'll need a mapbox account to do this, and a secret api key to use the python uploader. Basically we are just uploading the data to our mapbox account, then we will be able to add these layers to our web map! Actually publishing this map to a website is the final step but that process will be explained in a seperate post since there are a few more steps and these should be brief.Now we have a defined workflow which can be reproduced for any other region for similar impact analysis and information sharing.
+        </p>
+<pre><code class="language-python">u = mb.Uploader(access_token=sk)
+url = u.stage(open('ottawa_flood.geojson', 'rb'))
+job = u.create(url, 'ottawa_flood').json()     
+url = u.stage(open('extent.geojson', 'rb'))
+job = u.create(url, 'extent').json()</code></pre>
+        </div>
+        
+    </main>
+    <footer id="main-footer">
+        Copyright &copy; 2019
+    </footer>
+    <script src="../js/main.js"></script>
+    <script src="../js/prism.js"></script>
+
+</body>
+</html>

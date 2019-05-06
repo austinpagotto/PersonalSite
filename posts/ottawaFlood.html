@@ -3,7 +3,7 @@
 <html>
 <head>
   <meta charset='utf-8' />
-  <title>Display a map</title>
+  <title>Flooding 2019</title>
   <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
   <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.js'></script>
   <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.53.0/mapbox-gl.css' rel='stylesheet' />
@@ -22,14 +22,16 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiYXBhZ290dG8iLCJhIjoiY2pwNzh0NjYxMW1ndDNxbnJ4Z
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/apagotto/cjv5thobz047m1fpf0wvlj74h',
-  center: [-75.663362, 45.405191],
-  zoom: 11.6
+  center: [-75.693362, 45.445191],
+  zoom: 10,
+  minZoom: 10
 });
 
-map.addControl(new MapboxGeocoder({
-accessToken: mapboxgl.accessToken,
-mapboxgl: mapboxgl
-}));
+// map.addControl(new MapboxGeocoder({
+// accessToken: mapboxgl.accessToken,
+// mapboxgl: mapboxgl
+// }));
+
 map.on('load',function(){
             var popup = new mapboxgl.Popup({
                 closeButton: false,
@@ -57,6 +59,3 @@ map.on('load',function(){
             });
 
 </script>
-
-</body>
-</html>
