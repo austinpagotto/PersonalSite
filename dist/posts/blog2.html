@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="Geocoding with Geopy">
+    <meta name="keywords" content="Geocode,Python,Geopy,Google,Ottawa,GIS,geopandas,Spatial">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Geocoding with Google and Geopy</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/main.css">
+    <link rel="stylesheet" href="../css/prism.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Inconsolata');
+    </style>
+</head>
+<body>
+    <header>
+        <div class="menu-btn">
+            <div class="btn-line"></div>
+            <div class="btn-line"></div>
+            <div class="btn-line"></div>
+        </div>
+        <nav class="menu">
+            <div class="menu-branding">
+                <div class="portrait"></div>
+            </div>
+            <ul class="menu-nav">
+                <li class="nav-item">
+                    <a href='../index.html' class="nav-link">
+                        Home
+                    </a>
+                </li>
+                <li class="nav-item current">
+                    <a href='../about.html' class="nav-link">
+                        About Me
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='../work.html' class="nav-link">
+                        My Blog
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href='../contact.html' class="nav-link">
+                        Contact 
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main id="blog">
+        <div class="post">
+                <h2 class="post-title">
+                    Intro to Geocoding in Python with Google maps API
+                </h2>
+        <div class="post-time">
+            <time>May 16 2019</time>
+        </div>
+
+        <div class="post-author">
+            <em>By: Austin Pagotto</em>
+        </div>
+        <br>
+            <hr>
+         <br>
+
+        <div class="post-text">
+            <p>
+                Quick tutorial on how use python and google to geocode addresses.
+            </p>  
+                <div class="post-text-tools">
+                <p>
+                    Tools and data we'll use:   
+                    <ul>
+                        <li><a href="https://developers.google.com/maps/documentation/geocoding/start">Google Geocoding</a></li>
+                        <li><a href="https://www.python.org/">Python</a></li>
+                        <li><a href="https://geopy.readthedocs.io/en/stable/">Geopy</a></li>
+                    </ul>
+                </p>
+                </div>
+                <div class="post-subtitle">
+                    <h3>
+                       Import Packages and Data
+                    </h3>
+                </div>
+                <p>
+                    To get started, we need to import packages to help us out. We'll use pandas to create a dataframe, geopy to make geocoding easy, time to control how fast we send our requests and unidecode to remove unneccessary text components.
+                </p>
+                <pre><code class="language-python">import pandas as pd 
+import geopy
+import time
+import unidecode </code></pre>
+    <p>
+        An address file is needed to pass the data to the geocoder. For this walk through 'df' will hold our addresses. We also need an api key to use google's services which will be held in 'key'. We'll use our api key to set up our geocoding variable 'google_geocoder'.
+    </p>
+    <pre><code class="language-python">df = pd.read_csv('AddressFile')
+google_geocoder = geopy.geocoders.GoogleV3(api_key='key') </code></pre>
+        <div class="post-subtitle">
+            <h3>
+                Loop through and send addresses
+            </h3>
+        </div>
+            <p>
+                We use a for loop to go through our addresses and enumerate to keep track of iteration. Our Address file has the city seperate from the civic address, so we'll concatenate these to get the most applicable geocode response. time.sleep(0.01) is used so that we don't send responses too fast to the geocoder, which can make us skip some records.
+            </p>
+<pre><code class="language-python">for i,address in enumerate(df.Address):
+    location = df.loc[i,'Address'] +' '+ df.loc[i,'City']
+    time.sleep(0.01)</code></pre>
+<div class="post-subtitle">
+        <h3>
+            Still In the loop - Access geocode components
+        </h3>
+    </div>
+        <p>
+            Now were still in the loop, and we'll send the current address to google's geocoder with the '.geocode' method. We use an if statement so if there's no response we don't error. We then can access the Latitude, Longitude, Address, Accuracy and Postal Code components from the response. We use the unidecode package here on the response address to remove the unwanted possible french characters. The response comes in JSON form which can be accessed like a list. To extract the geocoded postal code we have to go deep in the response. It's also possible that the postal code isn't included so we have to use another if statement to check for that. 
+        </p>
+<pre><code class="language-python">    geocode = google_geocoder.geocode(location,timeout=10,components={'country':'CA'})
+        if geocode:
+            df.loc[i,'Latitude'] = geocode.latitude
+            df.loc[i,'Longitude'] = geocode.longitude
+            df.loc[i,'Geocoded Address'] = unidecode.unidecode(geocode.address)
+            df.loc[i,'Accuracy'] = geocode.raw['geometry']['location_type']
+
+            for j in range(len(geocode.raw['address_components'])):
+                if geocode.raw['address_components'][j]['types'][0] == 'postal_code':
+                    df.loc[i,'Postal Code'] = geocode.raw['address_components'][j]['short_name'] </code></pre>
+<div class="post-subtitle">
+        <h3>
+        Finishing up
+        </h3>
+    </div>
+        <p>
+          When the code finishes running you will have the added geocoded columns in your dataframe! You should note that you only have a limited number of free geocodes per month so keep track in your google api account.
+        </p>
+
+        </div>
+        
+    </main>
+    <footer id="main-footer">
+        Copyright &copy; 2019
+    </footer>
+    <script src="../js/main.js"></script>
+    <script src="../js/prism.js"></script>
+
+</body>
+</html>
